@@ -1,28 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: "2026-11-15T09:23:20Z"
   labels:
     app: user-service
   name: user-service
-  namespace: microservices
-  resourceVersion: "4829"
-  uid: c6b11197-a0d9-4ed5-b007-b5715db85b69
 spec:
-  clusterIP: 10.43.61.250
-  clusterIPs:
-  - 10.43.61.250
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
   ports:
   - port: 3000
     protocol: TCP
     targetPort: 3000
   selector:
     app: user-service
-  sessionAffinity: None
-  type: ClusterIP
 status:
   loadBalancer: {}
