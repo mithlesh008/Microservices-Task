@@ -6,7 +6,19 @@ This project demonstrates the containerization and deployment of a Node.js-based
 
 The application consists of four independent microservices that communicate through Kubernetes Services. Kubernetes Deployments manage application replicas, while the Traefik Ingress Controller provides external HTTP routing to the microservices.
 
-The project is deployed on a Kubernetes cluster running through k3d (Kubernetes in Docker) on an Amazon Linux EC2 instance.
+The project is deployed on a Kubernetes cluster running through k3d (Kubernetes in Docker).
+
+## Deployment Workflow
+
+1. Build Docker images for all four microservices.
+2. Create the k3d Kubernetes cluster.
+3. Import local Docker images into the cluster.
+4. Apply Kubernetes Deployment manifests.
+5. Apply Kubernetes `ClusterIP` Service manifests.
+6. Install and verify the Traefik Ingress Controller.
+7. Apply the Ingress configuration.
+8. Validate pods, Services, logs, and API endpoints.
+9. Capture screenshots and document the results.
 
 ## Application Components
 
@@ -23,12 +35,10 @@ The project is deployed on a Kubernetes cluster running through k3d (Kubernetes 
 * Express.js — REST API framework
 * Docker — Application containerization
 * Dockerfile — Container image creation
-* `.dockerignore` — Excludes unnecessary files from the Docker build context
 * Kubernetes — Container orchestration
 * k3d — Lightweight Kubernetes cluster running in Docker
 * Traefik — Kubernetes Ingress Controller
-* Amazon Linux EC2 — Cloud infrastructure
-* `kubectl` — Kubernetes cluster management
+* `kubectl` CLI — Kubernetes cluster management
 * Helm — Kubernetes package management
 
 ## Application Architecture
@@ -86,26 +96,25 @@ Microservices-Task/
 │       ├── Dockerfile
 │       └── .dockerignore
 │
-├── deployments/
-│   ├── user-service.yaml
-│   ├── product-service.yaml
-│   ├── order-service.yaml
-│   └── gateway-service.yaml
-│
-├── services/
-│   ├── user-service.yaml
-│   ├── product-service.yaml
-│   ├── order-service.yaml
-│   └── gateway-service.yaml
-│
-├── ingress/
-│   └── microservices-ingress.yaml
-│
-├── screenshots/
-│   ├── pods.png
-│   ├── logs.png
-│   └── service-test.png
-│
+submission/
+├── deployments
+│   ├── gateway-service.yaml
+│   ├── order-service.yaml
+│   ├── product-service.yaml
+│   └── user-service.yaml
+├── ingress
+│   ├── ingress.yaml
+│   └── ingress.yaml-backup
+├── screenshots
+│   ├── 012-Verify-All-Kubernetes-Resources.png
+│   ├── 013-Check-All-Logs.png
+│   ├── 014-Verify-Connectivity.png
+│   └── 015-Verify-api-endpoint-connnectivity.png
+└── services
+    ├── gateway-service.yaml
+    ├── order-service.yaml
+    ├── product-service.yaml
+    └── user-service.yaml
 └── README.md
 ```
 
@@ -138,6 +147,9 @@ docker build -t gateway-service:latest ./Microservices/GatewayService
 ```bash
 docker images
 ```
+
+<img width="1633" height="176" alt="04-Build-all-microservices" src="https://github.com/user-attachments/assets/cab3fdee-4426-4ab8-8627-86b6d9e7196a" />
+
 
 ### Docker Image Optimization
 
@@ -173,6 +185,9 @@ k3d version
 helm version
 ```
 
+<img width="1633" height="606" alt="01-k3dcluster-install" src="https://github.com/user-attachments/assets/84e315dd-94c6-4574-ace2-e75b93c33ddf" />
+
+
 ### Create the k3d Cluster
 
 ```bash
@@ -189,6 +204,8 @@ Verify the cluster:
 kubectl cluster-info
 kubectl get nodes
 ```
+<img width="921" height="281" alt="03-k3dcluster-verify-installation" src="https://github.com/user-attachments/assets/dcac0f67-311b-4380-a206-29d2d9eeea92" />
+
 
 ### Import Local Docker Images into k3d
 
@@ -202,6 +219,7 @@ k3d image import \
   gateway-service:latest \
   -c Microservices
 ```
+<img width="1719" height="331" alt="05-Import-all-images-to-K3d-cluster" src="https://github.com/user-attachments/assets/56bb8d87-1981-47f5-8f01-0349f743e662" />
 
 This makes the locally built images available to Kubernetes without requiring an external container registry.
 
@@ -246,6 +264,9 @@ Or apply all Deployment manifests at once:
 kubectl apply -f deployments/
 ```
 
+<img width="923" height="359" alt="07-Deploy-All-Micro-Services" src="https://github.com/user-attachments/assets/e4115a65-8f47-4b7d-ad9e-182d6642dabb" />
+
+
 ### Verify Deployments
 
 ```bash
@@ -285,6 +306,9 @@ kubectl get services
 kubectl get endpoints
 ```
 
+<img width="1054" height="138" alt="08-Expose-Single-Service" src="https://github.com/user-attachments/assets/ad083f06-212c-4b1e-a2e9-19150152e113" />
+
+
 ### Inter-Service Communication
 
 Services can communicate with each other using Kubernetes DNS names:
@@ -309,6 +333,7 @@ kubectl get pods -n kube-system
 kubectl get deployment traefik -n kube-system
 kubectl get ingressclass
 ```
+<img width="1054" height="192" alt="09-Verify-Available-Ingress" src="https://github.com/user-attachments/assets/67c5fbba-e421-4700-80a4-46111ef86a56" />
 
 ### Ingress Configuration
 
@@ -358,6 +383,9 @@ kubectl get pods
 kubectl get svc
 ```
 
+<img width="1041" height="605" alt="012-Verify-All-Kubernetes-Resources" src="https://github.com/user-attachments/assets/698a7c73-a4d7-47dd-ac03-b96507c468ed" />
+
+
 ### Check Application Logs
 
 ```bash
@@ -366,6 +394,8 @@ kubectl logs deployment/product-service
 kubectl logs deployment/order-service
 kubectl logs deployment/gateway-service
 ```
+<img width="964" height="391" alt="013-Check-All-Logs" src="https://github.com/user-attachments/assets/18caf7ba-0b74-4851-baba-69f4b3ac88c7" />
+
 
 ### Test Services Using Port Forwarding
 
@@ -410,6 +440,10 @@ curl http://microservices.local/api/users
 curl http://microservices.local/api/products
 curl http://microservices.local/api/orders
 ```
+
+<img width="1005" height="659" alt="014-Verify-Connectivity" src="https://github.com/user-attachments/assets/1ba755cd-1e19-4729-8648-91a9972aa13c" />
+
+<img width="1038" height="693" alt="015-Verify-api-endpoint-connnectivity" src="https://github.com/user-attachments/assets/9e088a53-2243-4eee-b08a-753f1a8f1f15" />
 
 These commands assume that the hostname resolves to the EC2 host and the Ingress ports are correctly exposed.
 
@@ -491,57 +525,8 @@ The `screenshots/` directory contains evidence of deployment and testing.
 
 | Screenshot | Description |
 | --- | --- |
-| `pods.png` | Shows all four microservice pods running successfully |
-| `logs.png` | Shows application logs and service communication |
-| `service-test.png` | Shows successful API requests using `curl` or port-forwarding |
+| `012-Verify-All-Kubernetes-Resources.png` | Shows all four microservice pods running successfully |
+| `013-Check-All-Logs.png` | Shows application logs and service communication |
+| `014-Verify-Connectivity.png` and `015-Verify-api-endpoint-connnectivity.png`| Shows successful API requests using `curl` or port-forwarding |
 
 These screenshots demonstrate the successful deployment and validation of the application.
-
-## 9. Deployment Workflow
-
-1. Build Docker images for all four microservices.
-2. Create the k3d Kubernetes cluster.
-3. Import local Docker images into the cluster.
-4. Apply Kubernetes Deployment manifests.
-5. Apply Kubernetes `ClusterIP` Service manifests.
-6. Install and verify the Traefik Ingress Controller.
-7. Apply the Ingress configuration.
-8. Validate pods, Services, logs, and API endpoints.
-9. Capture screenshots and document the results.
-
-## 10. Assignment Deliverables
-
-The submission contains the following components:
-
-```text
-submission/
-├── deployments/
-│   ├── user-service.yaml
-│   ├── product-service.yaml
-│   ├── order-service.yaml
-│   └── gateway-service.yaml
-├── services/
-│   ├── user-service.yaml
-│   ├── product-service.yaml
-│   ├── order-service.yaml
-│   └── gateway-service.yaml
-├── ingress/
-│   └── microservices-ingress.yaml
-├── screenshots/
-│   ├── pods.png
-│   ├── logs.png
-│   └── service-test.png
-└── README.md
-```
-
-The Dockerfiles and `.dockerignore` files are maintained alongside their respective microservice source directories.
-
-## 11. Conclusion
-
-This project demonstrates the deployment of a containerized Node.js microservices application using Docker and Kubernetes. The four independent services are deployed using Kubernetes Deployments and exposed internally through `ClusterIP` Services. Traefik Ingress Controller provides centralized HTTP routing, while Kubernetes DNS enables service-to-service communication.
-
-The application is deployed on a k3d Kubernetes cluster running on Amazon Linux EC2, demonstrating container orchestration, service discovery, Ingress routing, and cloud-based deployment.
-
-## Project Repository
-
-GitHub Repository — Microservices Task
