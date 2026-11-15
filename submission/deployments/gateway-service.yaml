@@ -1,24 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: gateway-service
   labels:
     app: gateway-service
-  name: gateway-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: gateway-service
-  strategy: {}
   template:
     metadata:
       labels:
         app: gateway-service
     spec:
       containers:
-        - image: gateway-service:latest
-          name: gateway-service
+        - name: gateway-service
+          image: gateway-service:latest
           imagePullPolicy: Never
           ports:
-          - containerPort: 3003
-          resources: {}
+            - name: http
+              containerPort: 3003
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            tcpSocket:
+              port: 3003
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 3003
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
