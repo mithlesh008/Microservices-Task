@@ -96,25 +96,25 @@ Microservices-Task/
 │       ├── Dockerfile
 │       └── .dockerignore
 │
-submission/
-├── deployments
-│   ├── gateway-service.yaml
-│   ├── order-service.yaml
-│   ├── product-service.yaml
-│   └── user-service.yaml
-├── ingress
-│   ├── ingress.yaml
-│   └── ingress.yaml-backup
-├── screenshots
-│   ├── 012-Verify-All-Kubernetes-Resources.png
-│   ├── 013-Check-All-Logs.png
-│   ├── 014-Verify-Connectivity.png
-│   └── 015-Verify-api-endpoint-connnectivity.png
-└── services
-    ├── gateway-service.yaml
-    ├── order-service.yaml
-    ├── product-service.yaml
-    └── user-service.yaml
+├──submission/
+│   ├── deployments
+│       ├── gateway-service.yaml
+│       ├── order-service.yaml
+│       ├── product-service.yaml
+│       └── user-service.yaml
+|   ├── ingress
+│       ├── ingress.yaml
+│       └── ingress.yaml-backup
+|.  ├── screenshots
+│       ├── 012-Verify-All-Kubernetes-Resources.png
+│       ├── 013-Check-All-Logs.png
+│       ├── 014-Verify-Connectivity.png
+│       └── 015-Verify-api-endpoint-connnectivity.png
+|   ├── services
+|       ├── gateway-service.yaml
+|       ├── order-service.yaml
+|       ├── product-service.yaml
+|       └── user-service.yaml
 └── README.md
 ```
 
