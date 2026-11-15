@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: product-service
+  name: product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+        - image: product-service:latest
+          name: product-service
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 3001
+          resources: {}

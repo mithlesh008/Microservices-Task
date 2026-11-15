@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2026-11-15T09:54:47Z"
+  labels:
+    app: order-service
+  name: order-service
+  namespace: microservices
+  resourceVersion: "5911"
+  uid: 25b0d292-d069-4a55-87d7-2ac613181720
+spec:
+  clusterIP: 10.43.109.208
+  clusterIPs:
+  - 10.43.109.208
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 3002
+    protocol: TCP
+    targetPort: 3002
+  selector:
+    app: order-service
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2026-11-15T09:55:47Z"
+  labels:
+    app: product-service
+  name: product-service
+  namespace: microservices
+  resourceVersion: "5944"
+  uid: c59de9e2-116e-456d-b20c-1ffdcf8a7aa2
+spec:
+  clusterIP: 10.43.248.128
+  clusterIPs:
+  - 10.43.248.128
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 3001
+    protocol: TCP
+    targetPort: 3001
+  selector:
+    app: product-service
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

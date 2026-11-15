@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2026-11-15T09:42:17Z"
+  labels:
+    app: gateway-service
+  name: gateway-service
+  namespace: microservices
+  resourceVersion: "5431"
+  uid: d6c11a67-6fc7-4820-848f-465f4da5b137
+spec:
+  clusterIP: 10.43.12.228
+  clusterIPs:
+  - 10.43.12.228
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 3003
+    protocol: TCP
+    targetPort: 3003
+  selector:
+    app: gateway-service
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
